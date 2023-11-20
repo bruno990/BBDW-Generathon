@@ -1,7 +1,15 @@
-FROM python:3.8-buster
+FROM python:3.9-slim
 
-COPY . ./
+WORKDIR /app
 
-RUN python3 -m pip install requests
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    git 
+    
+RUN git clone https://github.com/bruno990/BBDW-Generathon.git .
 
-CMD ["python", "req.py"]
+RUN pip3 install -r requirements.txt
+
+EXPOSE 8501
+
+ENTRYPOINT ["streamlit", "run", "main.py", "--server.port=8501", "--server.address=0.0.0.0"]
